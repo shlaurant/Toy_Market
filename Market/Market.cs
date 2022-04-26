@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Market
 {
     public class Market
     {
+        private Dictionary<Good, double> catalog;
+
         public void Order(Order order)
         {
             throw new NotImplementedException();
