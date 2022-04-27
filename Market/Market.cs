@@ -45,19 +45,31 @@ namespace Market
         private class GoodMarket
         {
             private readonly Good good;
-            private readonly LinkedList<Order> bids;
-            private readonly LinkedList<Order> offers;
+            private readonly LinkedList<Order> bids = new();
+            private readonly LinkedList<Order> offers = new();
             private int currentPrice;
 
-            private void Bid(Order order)
+            private void Bid(Order bid)
             {
-                while (offers.First != null &&
-                       order.Price >= FirstOffer().Price)
+                while (offers.First != null && bid.Price >= FirstOffer().Price)
                 {
-                    var tradedAmount =
-                        Math.Min(order.Amount, FirstOffer().Amount);
+                    bid.Bid(FirstOffer());
+                    currentPrice = FirstOffer().Price;
+                    
+                    if (FirstOffer().IsResolved())
+                    {
+                        offers.RemoveFirst();
+                    }
+                    
+                    if (bid.IsResolved())
+                    {
+                        break;
+                    }
                 }
-                //add to book
+
+                if (!bid.IsResolved())
+                {
+                }
             }
 
             private void Offer(Order order)
