@@ -60,6 +60,14 @@ namespace Tests
             testMarket.TakeOrder(bid2);
             Assert.True(testMarket.Bids[1].Equals(bid2));
         }
-        //middle
+
+        [Test]
+        public void AddMiddleBid()
+        {
+            testMarket.TakeOrder(bid1);
+            testMarket.TakeOrder(bid2);
+            testMarket.TakeOrder(bid0);
+            Assert.True(testMarket.Bids[1].Equals(bid0));
+        }
     }
 }
