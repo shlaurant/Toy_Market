@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 
 namespace Market
 {
@@ -59,6 +60,10 @@ namespace Market
             {
                 AddBidToBook(order);
             }
+            else
+            {
+                AddOfferToBook(order);
+            }
         }
 
         private void AddBidToBook(Order bid)
@@ -80,6 +85,28 @@ namespace Market
             if (curNode == null)
             {
                 bids.AddLast(bid);
+            }
+        }
+
+        private void AddOfferToBook(Order offer)
+        {
+            var curNode = offers.First;
+            while (curNode != null)
+            {
+                if (offer.Price < curNode.Value.Price)
+                {
+                    offers.AddBefore(curNode, offer);
+                    break;
+                }
+                else
+                {
+                    curNode = curNode.Next;
+                }
+            }
+
+            if (curNode == null)
+            {
+                offers.AddLast(offer);
             }
         }
 

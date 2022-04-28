@@ -2,11 +2,11 @@ using System;
 using Market;
 using NUnit.Framework;
 
-namespace Tests
+namespace Tests.GoodMarket
 {
     public class WhenThereIsNoMatch
     {
-        private GoodMarket testMarket;
+        private Market.GoodMarket testMarket;
         private Good good = new Good("Oil");
         private Good wrongGood = new Good("Cotton");
         private Order bid0;
@@ -14,6 +14,7 @@ namespace Tests
         private Order bid2;
         private Order bid3;
         private Order wrongBid;
+        private Order offer0;
 
         [SetUp]
         public void Setup()
@@ -23,7 +24,10 @@ namespace Tests
             bid2 = new Order(good, 8, 10, Order.OrderType.Bid, null);
             bid3 = new Order(good, 10, 10, Order.OrderType.Bid, null);
             wrongBid = new Order(wrongGood, 10, 10, Order.OrderType.Bid, null);
-            testMarket = new GoodMarket(good);
+
+            offer0 = new Order(good, 10, 10, Order.OrderType.Offer, null);
+
+            testMarket = new Market.GoodMarket(good);
         }
 
         [Test]
@@ -80,6 +84,13 @@ namespace Tests
             testMarket.TakeOrder(bid0);
             testMarket.TakeOrder(bid3);
             Assert.True(testMarket.Bids[2].Equals(bid3));
+        }
+
+        [Test]
+        public void AddFirstOffer()
+        {
+            testMarket.TakeOrder(offer0);
+            Assert.True(testMarket.Offers[0].Equals(offer0));
         }
     }
 }
