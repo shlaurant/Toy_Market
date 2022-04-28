@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 
 namespace Market
@@ -48,6 +49,12 @@ namespace Market
 
         public void TakeOrder(Order order)
         {
+            if (!order.Good.Equals(good))
+            {
+                throw new ArgumentException(
+                    $"Received an order of {order.Good} while this is {good} market");
+            }
+
             if (order.Type.Equals(Order.OrderType.Bid))
             {
                 AddBidToBook(order);
