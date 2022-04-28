@@ -51,34 +51,50 @@ namespace Market
 
             private void Bid(Order bid)
             {
-                while (offers.First != null && bid.Price >= FirstOffer().Price)
+                var curNode = offers.First;
+                while (curNode != null && bid.Price >= curNode.Value.Price)
                 {
-                    bid.Bid(FirstOffer());
-                    currentPrice = FirstOffer().Price;
-                    
-                    if (FirstOffer().IsResolved())
-                    {
-                        offers.RemoveFirst();
-                    }
-                    
+                    bid.Bid(curNode.Value);
                     if (bid.IsResolved())
                     {
                         break;
                     }
+                    else
+                    {
+                        curNode = curNode.Next;
+                    }
+                }
+
+                while (offers.First != null && offers.First.Value.IsResolved())
+                {
+                    offers.RemoveFirst();
                 }
 
                 if (!bid.IsResolved())
                 {
+                    curNode = bids.First;
+                    while (curNode != null)
+                    {
+                        if (bid.Price > curNode.Value.Price)
+                        {
+                            bids.AddBefore(curNode, bid);
+                            break;
+                        }
+                        else
+                        {
+                            curNode = curNode.Next;
+                        }
+                    }
+
+                    if (curNode == null)
+                    {
+                        bids.AddLast(bid);
+                    }
                 }
             }
 
             private void Offer(Order order)
             {
-            }
-
-            private Order FirstOffer()
-            {
-                return offers.First.Value;
             }
         }
     }
@@ -120,7 +136,7 @@ namespace Market
         }
 
         /// <summary>
-        /// When the offer is made after an offer. Matched at a bid price
+        /// When the offer is made after an bid. Matched at a bid price
         /// </summary>
         public void Offer(Order bid)
         {
