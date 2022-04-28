@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace Tests
 {
-    public class Tests
+    public class GoodMarket
     {
         [SetUp]
         public void Setup()
@@ -10,15 +10,9 @@ namespace Tests
         }
 
         [Test]
-        public void Test1()
+        public void AddFirstBid()
         {
-            Assert.Pass();
-        }
-
-        [Test]
-        public void Test2()
-        {
-            Assert.Fail();
+            
         }
     }
 }
