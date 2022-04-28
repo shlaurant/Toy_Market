@@ -12,6 +12,7 @@ namespace Tests
         private Order bid0;
         private Order bid1;
         private Order bid2;
+        private Order bid3;
         private Order wrongBid;
 
         [SetUp]
@@ -20,6 +21,7 @@ namespace Tests
             bid0 = new Order(good, 10, 10, Order.OrderType.Bid, null);
             bid1 = new Order(good, 11, 10, Order.OrderType.Bid, null);
             bid2 = new Order(good, 8, 10, Order.OrderType.Bid, null);
+            bid3 = new Order(good, 10, 10, Order.OrderType.Bid, null);
             wrongBid = new Order(wrongGood, 10, 10, Order.OrderType.Bid, null);
             testMarket = new GoodMarket(good);
         }
@@ -68,6 +70,16 @@ namespace Tests
             testMarket.TakeOrder(bid2);
             testMarket.TakeOrder(bid0);
             Assert.True(testMarket.Bids[1].Equals(bid0));
+        }
+
+        [Test]
+        public void AddWithFifo()
+        {
+            testMarket.TakeOrder(bid1);
+            testMarket.TakeOrder(bid2);
+            testMarket.TakeOrder(bid0);
+            testMarket.TakeOrder(bid3);
+            Assert.True(testMarket.Bids[2].Equals(bid3));
         }
     }
 }
