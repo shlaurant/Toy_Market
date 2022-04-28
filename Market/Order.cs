@@ -4,19 +4,28 @@ namespace Market
 {
     public class Order
     {
+        public enum OrderType
+        {
+            Bid,
+            Offer
+        }
+
         public readonly Good Good;
         public readonly int Price;
         public readonly int Amount;
+        public readonly OrderType Type;
         private readonly ITrader trader;
 
         private int amountLeft;
 
-        public Order(Good good, int price, int amount, ITrader trader)
+        public Order(Good good, int price, int amount, OrderType type,
+            ITrader trader)
         {
             Good = good;
             Price = price;
             Amount = amount;
             this.trader = trader;
+            Type = type;
             amountLeft = Amount;
         }
 

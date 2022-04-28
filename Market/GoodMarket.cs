@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Market
 {
@@ -8,6 +9,14 @@ namespace Market
         private readonly LinkedList<Order> bids = new();
         private readonly LinkedList<Order> offers = new();
         private int currentPrice;
+
+        public ImmutableList<Order> Bids => bids.ToImmutableList();
+        public ImmutableList<Order> Offers => offers.ToImmutableList();
+
+        public GoodMarket(Good good)
+        {
+            this.good = good;
+        }
 
         public void Bid(Order bid)
         {
@@ -34,6 +43,14 @@ namespace Market
                 {
                     curNode = curNode.Next;
                 }
+            }
+        }
+
+        public void TakeOrder(Order order)
+        {
+            if (order.Type.Equals(Order.OrderType.Bid))
+            {
+                AddBidToBook(order);
             }
         }
 
