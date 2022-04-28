@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Text;
 
 namespace Market
 {
@@ -68,6 +69,25 @@ namespace Market
         private bool IsLower((Order, Order) orders)
         {
             return orders.Item1.Price < orders.Item2.Price;
+        }
+
+        private string StringFormOf(LinkedList<Order> orders)
+        {
+            var result = new StringBuilder();
+            var node = orders.First;
+            while (node != null)
+            {
+                result.AppendLine(node.Value.ToString());
+                node = node.Next;
+            }
+
+            return result.ToString();
+        }
+
+        public override string ToString()
+        {
+            return
+                $"{nameof(good)}: {good},\n\n{nameof(bids)}:\n{StringFormOf(bids)}\n{nameof(offers)}:\n{StringFormOf(offers)}\n{nameof(currentPrice)}: {currentPrice}";
         }
     }
 }

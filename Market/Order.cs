@@ -74,5 +74,10 @@ namespace Market
         {
             return Math.Min(amountLeft, other.amountLeft);
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(Good)}: {Good}, {nameof(Price)}: {Price}, {nameof(Amount)}: {Amount}, {nameof(Type)}: {Type}";
+        }
     }
 }

@@ -8,5 +8,10 @@
         {
             Name = name;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(Name)}: {Name}";
+        }
     }
 }

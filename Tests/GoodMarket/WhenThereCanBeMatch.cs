@@ -25,6 +25,12 @@ namespace Tests.GoodMarket
         }
 
         [Test]
+        public void Construct()
+        {
+            Assert.Pass($"{market}");
+        }
+
+        [Test]
         public void AddBidToBookWithNoMatch()
         {
             Assert.Fail();
