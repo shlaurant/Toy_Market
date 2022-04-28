@@ -69,6 +69,12 @@ namespace Tests.GoodMarket
             {
                 Assert.AreNotEqual(bid, market.Bids[0]);
             }
+
+            [Test]
+            public void ChangeCurrentPrice()
+            {
+                Assert.AreEqual(market.Offers[0].Price, market.CurrentPrice);
+            }
         }
 
         //offer also resolved

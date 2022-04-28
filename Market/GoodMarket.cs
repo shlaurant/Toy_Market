@@ -10,10 +10,10 @@ namespace Market
         private readonly Good good;
         private readonly LinkedList<Order> bids = new();
         private readonly LinkedList<Order> offers = new();
-        private int currentPrice;
 
         public ImmutableList<Order> Bids => bids.ToImmutableList();
         public ImmutableList<Order> Offers => offers.ToImmutableList();
+        public int CurrentPrice { get; set; }
 
         public GoodMarket(Good good)
         {
@@ -34,6 +34,7 @@ namespace Market
                     order.Price >= offers.First.Value.Price)
                 {
                     Order.Match(offers.First.Value, order);
+                    CurrentPrice = offers.First.Value.Price;
                 }
                 else
                 {
@@ -95,7 +96,7 @@ namespace Market
         public override string ToString()
         {
             return
-                $"{nameof(good)}: {good},\n\n{nameof(bids)}:\n{StringFormOf(bids)}\n{nameof(offers)}:\n{StringFormOf(offers)}\n{nameof(currentPrice)}: {currentPrice}";
+                $"{nameof(good)}: {good},\n\n{nameof(bids)}:\n{StringFormOf(bids)}\n{nameof(offers)}:\n{StringFormOf(offers)}\n{nameof(CurrentPrice)}: {CurrentPrice}";
         }
     }
 }
