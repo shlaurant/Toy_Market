@@ -47,10 +47,10 @@ namespace Tests.GoodMarket
             }
         }
 
-        public class WhenImmediateBidResolve: ForBookWithOrders
+        public class WhenImmediateBidResolve : ForBookWithOrders
         {
             private Order bid;
-            
+
             [SetUp]
             public new void Setup()
             {
@@ -63,7 +63,7 @@ namespace Tests.GoodMarket
             {
                 Assert.AreEqual(5, market.Offers[0].AmountLeft);
             }
-            
+
             [Test]
             public void MatchBidAndResolve()
             {
@@ -74,6 +74,26 @@ namespace Tests.GoodMarket
             public void ChangeCurrentPrice()
             {
                 Assert.AreEqual(market.Offers[0].Price, market.CurrentPrice);
+            }
+        }
+
+        public class WhenBidAndOfferFullyMatched : ForBookWithOrders
+        {
+            private Order bid;
+            private Order firstOffer;
+
+            [SetUp]
+            public new void Setup()
+            {
+                base.Setup();
+                firstOffer = market.Offers[0];
+                bid = marketFac.AddOrder(Order.OrderType.Bid, 11, 10);
+            }
+
+            [Test]
+            public void RemoveFullMatchedOffer()
+            {
+                Assert.AreNotEqual(firstOffer, market.Offers[0]);
             }
         }
 
