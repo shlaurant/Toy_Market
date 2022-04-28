@@ -20,9 +20,11 @@ namespace Tests.GoodMarket
             market = new Market.GoodMarket(good);
         }
 
-        public void AddOrder(Order.OrderType type, int price, int amount)
+        public Order AddOrder(Order.OrderType type, int price, int amount)
         {
-            market.TakeOrder(new Order(good, price, amount, type, null));
+            var orderAdded = new Order(good, price, amount, type, null);
+            market.TakeOrder(orderAdded);
+            return orderAdded;
         }
     }
 }

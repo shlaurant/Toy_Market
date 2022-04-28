@@ -33,7 +33,8 @@ namespace Tests.GoodMarket
         [Test]
         public void AddBidToBookWithNoMatch()
         {
-            Assert.Fail();
+            var bid = marketFac.AddOrder(Order.OrderType.Bid, 10, 5);
+            Assert.True(market.Bids[1].Equals(bid));
         }
 
         [Test]
