@@ -1,5 +1,7 @@
-﻿using Market;
+﻿using System;
+using Market;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace Tests.GoodMarket
 {
@@ -43,5 +45,16 @@ namespace Tests.GoodMarket
             var offer = marketFac.AddOrder(Order.OrderType.Offer, 11, 5);
             Assert.True(market.Offers[1].Equals(offer));
         }
+
+        [Test]
+        public void MatchBidWithOneOffer()
+        {
+            marketFac.AddOrder(Order.OrderType.Bid, 11, 5);
+            Assert.AreEqual(5, market.Offers[0].AmountLeft);
+        }
+        
+        //offer also resolved
+        //2or more offer
+        //vice versa
     }
 }

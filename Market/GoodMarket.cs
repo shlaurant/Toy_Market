@@ -30,7 +30,15 @@ namespace Market
 
             if (order.Type.Equals(Order.OrderType.Bid))
             {
-                AddOrderToBook(order, bids, IsHigher);
+                if (offers.First != null &&
+                    order.Price >= offers.First.Value.Price)
+                {
+                    Order.Match(offers.First.Value, order);
+                }
+                else
+                {
+                    AddOrderToBook(order, bids, IsHigher);
+                }
             }
             else
             {

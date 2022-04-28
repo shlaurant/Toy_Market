@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Market
 {
@@ -14,9 +16,11 @@ namespace Market
         public readonly int Price;
         public readonly int Amount;
         public readonly OrderType Type;
-        private readonly ITrader trader;
+        public readonly ITrader trader;
 
-        private int amountLeft;
+        public int AmountLeft => Amount - transactions.Sum(trs => trs.Amount);
+
+        private readonly List<Transaction> transactions = new List<Transaction>();
 
         public Order(Good good, int price, int amount, OrderType type,
             ITrader trader)
@@ -26,58 +30,38 @@ namespace Market
             Amount = amount;
             this.trader = trader;
             Type = type;
-            amountLeft = Amount;
         }
 
-        /// <summary>
-        /// When the bid is made after an offer. Matched at a offer price
-        /// </summary>
-        public void Bid(Order offer)
+        public static void Match(Order first, Order second)
         {
-            if (offer.Price > Price)
-            {
-                throw new ArgumentException(
-                    $"Bid price should be higher than offer price. Current bid: {Price}, offer: {offer.Price}");
-            }
-
-            var amountTraded = AmountTraded(offer);
-            amountLeft -= amountTraded;
-            offer.amountLeft -= amountTraded;
-            trader.OnBidMatched(this, offer.Price, amountTraded);
-            offer.trader.OnOfferMatched(offer, offer.Price, amountTraded);
+            var tradedAmount = Math.Min(first.AmountLeft, second.AmountLeft);
+            first.AddTransaction(second, first.Price, tradedAmount);
+            second.AddTransaction(first, first.Price, tradedAmount);
         }
 
-        /// <summary>
-        /// When the offer is made after an bid. Matched at a bid price
-        /// </summary>
-        public void Offer(Order bid)
+        private void AddTransaction(Order other, int strikePrice, int amount)
         {
-            if (Price > bid.Price)
-            {
-                throw new ArgumentException(
-                    $"Bid price should be higher than offer price. Current bid: {bid.Price}, offer: {Price}");
-            }
-
-            var amountTraded = AmountTraded(bid);
-            amountLeft -= amountTraded;
-            bid.amountLeft -= amountTraded;
-            trader.OnOfferMatched(this, bid.Price, amountTraded);
-            bid.trader.OnBidMatched(this, bid.Price, amountTraded);
-        }
-
-        public bool IsResolved()
-        {
-            return amountLeft <= 0;
-        }
-
-        private int AmountTraded(Order other)
-        {
-            return Math.Min(amountLeft, other.amountLeft);
+            transactions.Add(new Transaction(other, strikePrice, amount));
         }
 
         public override string ToString()
         {
-            return $"{nameof(Good)}: {Good}, {nameof(Price)}: {Price}, {nameof(Amount)}: {Amount}, {nameof(Type)}: {Type}";
+            return
+                $"{nameof(Good)}: {Good}, {nameof(Price)}: {Price}, {nameof(Amount)}: {Amount}, {nameof(Type)}: {Type}";
+        }
+
+        private class Transaction
+        {
+            public readonly Order Other;
+            public readonly int StrikePrice;
+            public readonly int Amount;
+
+            public Transaction(Order other, int strikePrice, int amount)
+            {
+                Other = other;
+                StrikePrice = strikePrice;
+                Amount = amount;
+            }
         }
     }
 }
