@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Tests
 {
-    public class GoodMarketTest
+    public class WhenThereIsNoMatch
     {
         private GoodMarket testMarket;
         private Good good = new Good("Oil");
