@@ -15,6 +15,9 @@ namespace Tests.GoodMarket
         private Order bid3;
         private Order wrongBid;
         private Order offer0;
+        private Order offer1;
+        private Order offer2;
+        private Order offer3;
 
         [SetUp]
         public void Setup()
@@ -26,7 +29,10 @@ namespace Tests.GoodMarket
             wrongBid = new Order(wrongGood, 10, 10, Order.OrderType.Bid, null);
 
             offer0 = new Order(good, 10, 10, Order.OrderType.Offer, null);
-
+            offer1 = new Order(good, 9, 10, Order.OrderType.Offer, null);
+            offer2 = new Order(good, 11, 10, Order.OrderType.Offer, null);
+            offer3 = new Order(good, 10, 10, Order.OrderType.Offer, null);
+            
             testMarket = new Market.GoodMarket(good);
         }
 
@@ -77,7 +83,7 @@ namespace Tests.GoodMarket
         }
 
         [Test]
-        public void AddWithFifo()
+        public void AddBidWithFifo()
         {
             testMarket.TakeOrder(bid1);
             testMarket.TakeOrder(bid2);
@@ -91,6 +97,33 @@ namespace Tests.GoodMarket
         {
             testMarket.TakeOrder(offer0);
             Assert.True(testMarket.Offers[0].Equals(offer0));
+        }
+
+        [Test]
+        public void AddLowestOffer()
+        {
+            testMarket.TakeOrder(offer0);
+            testMarket.TakeOrder(offer1);
+            Assert.True(testMarket.Offers[0].Equals(offer1));
+        }
+
+        [Test]
+        public void AddHighestOffer()
+        {
+            testMarket.TakeOrder(offer0);
+            testMarket.TakeOrder(offer1);
+            testMarket.TakeOrder(offer2);
+            Assert.True(testMarket.Offers[2].Equals(offer2));
+        }
+
+        [Test]
+        public void AddOfferWithFifo()
+        {
+            testMarket.TakeOrder(offer0);
+            testMarket.TakeOrder(offer1);
+            testMarket.TakeOrder(offer2);
+            testMarket.TakeOrder(offer3);
+            Assert.True(testMarket.Offers[2].Equals(offer3));
         }
     }
 }
