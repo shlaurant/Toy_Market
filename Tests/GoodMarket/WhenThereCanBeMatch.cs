@@ -40,7 +40,8 @@ namespace Tests.GoodMarket
         [Test]
         public void AddOfferToBookWithNoMatch()
         {
-            Assert.Fail();
+            var offer = marketFac.AddOrder(Order.OrderType.Offer, 11, 5);
+            Assert.True(market.Offers[1].Equals(offer));
         }
     }
 }
