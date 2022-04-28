@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 
 namespace Market
 {
@@ -20,34 +19,6 @@ namespace Market
             this.good = good;
         }
 
-        public void Bid(Order bid)
-        {
-            ResolveBid(bid);
-            RemoveResolvedOffers();
-            if (!bid.IsResolved())
-            {
-                AddBidToBook(bid);
-            }
-        }
-
-        public void Offer(Order offer)
-        {
-            var curNode = bids.First;
-            while (curNode != null && offer.Price <= curNode.Value.Price)
-            {
-                offer.Offer(curNode.Value);
-                currentPrice = curNode.Value.Price;
-                if (offer.IsResolved())
-                {
-                    break;
-                }
-                else
-                {
-                    curNode = curNode.Next;
-                }
-            }
-        }
-
         public void TakeOrder(Order order)
         {
             if (!order.Good.Equals(good))
@@ -58,22 +29,23 @@ namespace Market
 
             if (order.Type.Equals(Order.OrderType.Bid))
             {
-                AddBidToBook(order);
+                AddOrderToBook(order, bids, IsHigher);
             }
             else
             {
-                AddOfferToBook(order);
+                AddOrderToBook(order, offers, IsLower);
             }
         }
 
-        private void AddBidToBook(Order bid)
+        private void AddOrderToBook(Order order, LinkedList<Order> book,
+            Predicate<(Order, Order)> predicate)
         {
-            var curNode = bids.First;
+            var curNode = book.First;
             while (curNode != null)
             {
-                if (bid.Price > curNode.Value.Price)
+                if (predicate.Invoke((order, curNode.Value)))
                 {
-                    bids.AddBefore(curNode, bid);
+                    book.AddBefore(curNode, order);
                     break;
                 }
                 else
@@ -84,56 +56,18 @@ namespace Market
 
             if (curNode == null)
             {
-                bids.AddLast(bid);
+                book.AddLast(order);
             }
         }
 
-        private void AddOfferToBook(Order offer)
+        private bool IsHigher((Order, Order) orders)
         {
-            var curNode = offers.First;
-            while (curNode != null)
-            {
-                if (offer.Price < curNode.Value.Price)
-                {
-                    offers.AddBefore(curNode, offer);
-                    break;
-                }
-                else
-                {
-                    curNode = curNode.Next;
-                }
-            }
-
-            if (curNode == null)
-            {
-                offers.AddLast(offer);
-            }
+            return orders.Item1.Price > orders.Item2.Price;
         }
 
-        private void RemoveResolvedOffers()
+        private bool IsLower((Order, Order) orders)
         {
-            while (offers.First != null && offers.First.Value.IsResolved())
-            {
-                offers.RemoveFirst();
-            }
-        }
-
-        private void ResolveBid(Order bid)
-        {
-            var curNode = offers.First;
-            while (curNode != null && bid.Price >= curNode.Value.Price)
-            {
-                bid.Bid(curNode.Value);
-                currentPrice = curNode.Value.Price;
-                if (bid.IsResolved())
-                {
-                    break;
-                }
-                else
-                {
-                    curNode = curNode.Next;
-                }
-            }
+            return orders.Item1.Price < orders.Item2.Price;
         }
     }
 }
