@@ -35,6 +35,10 @@ namespace Market
                 {
                     Order.Match(offers.First.Value, order);
                     CurrentPrice = offers.First.Value.Price;
+                    if (offers.First.Value.AmountLeft == 0)
+                    {
+                        offers.RemoveFirst();
+                    }
                 }
                 else
                 {
