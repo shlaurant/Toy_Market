@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
 
 namespace Market
@@ -35,6 +36,8 @@ namespace Market
                 {
                     Order.Match(offers.First.Value, order);
                     CurrentPrice = offers.First.Value.Price;
+                    offers.Where(offer => offer.AmountLeft == 0).ToList()
+                        .ForEach(resolved => offers.Remove(resolved));
                 }
                 else
                 {
