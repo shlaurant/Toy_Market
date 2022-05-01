@@ -31,15 +31,23 @@ namespace Market
 
             if (order.Type.Equals(Order.OrderType.Bid))
             {
-                if (offers.First != null &&
-                    order.Price >= offers.First.Value.Price)
+                var curNode = offers.First;
+                while (curNode != null && order.AmountLeft > 0)
                 {
-                    Order.Match(offers.First.Value, order);
-                    CurrentPrice = offers.First.Value.Price;
-                    offers.Where(offer => offer.AmountLeft == 0).ToList()
-                        .ForEach(resolved => offers.Remove(resolved));
+                    if (curNode.Value.Price > order.Price)
+                    {
+                        break;
+                    }
+
+                    Order.Match(curNode.Value, order);
+                    CurrentPrice = curNode.Value.Price;
+                    curNode = curNode.Next;
                 }
-                else
+
+                offers.Where(offer => offer.AmountLeft == 0).ToList()
+                    .ForEach(resolved => offers.Remove(resolved));
+                
+                if (order.AmountLeft > 0)
                 {
                     AddOrderToBook(order, bids, IsHigher);
                 }

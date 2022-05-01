@@ -95,6 +95,36 @@ namespace Tests.GoodMarket
             {
                 Assert.AreNotEqual(firstOffer, market.Offers[0]);
             }
+
+            [Test]
+            public void NoAddToBidBook()
+            {
+                Assert.AreNotEqual(market.Bids[0], bid);
+            }
+        }
+
+        public class WhenBidAmountExceeded : ForBookWithOrders
+        {
+            private Order bid;
+
+            [SetUp]
+            public new void Setup()
+            {
+                base.Setup();
+                bid = marketFac.AddOrder(Order.OrderType.Bid, 11, 20);
+            }
+
+            [Test]
+            public void CalcLeftAmount()
+            {
+                Assert.AreEqual(10, bid.AmountLeft);
+            }
+
+            [Test]
+            public void AddedToBidBook()
+            {
+                Assert.AreEqual(bid, market.Bids[0]);
+            }
         }
 
         //offer also resolved
