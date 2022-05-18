@@ -102,6 +102,12 @@ namespace Tests.GoodMarket
             {
                 Assert.AreNotEqual(bid, market.Bids[0]);
             }
+            
+            [Test]
+            public void ChangeCurrentPrice()
+            {
+                Assert.AreEqual(bid.Price, market.CurrentPrice);
+            }
         }
 
         public class WhenBidLeft : ForBookWithOrders
@@ -121,6 +127,18 @@ namespace Tests.GoodMarket
             public void ResolveFirstOffer()
             {
                 Assert.AreEqual(secondOffer, market.Offers[0]);
+            }
+
+            [Test]
+            public void ReduceBidAmount()
+            {
+                Assert.Fail();
+            }
+
+            [Test]
+            public void AddBidToBook()
+            {
+                Assert.Ignore();
             }
         }
 
