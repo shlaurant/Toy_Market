@@ -138,7 +138,7 @@ namespace Tests.GoodMarket
             [Test]
             public void AddBidToBook()
             {
-                Assert.Ignore();
+                Assert.AreEqual(bid, market.Bids[0]);
             }
         }
 
