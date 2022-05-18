@@ -132,7 +132,7 @@ namespace Tests.GoodMarket
             [Test]
             public void ReduceBidAmount()
             {
-                Assert.Fail();
+                Assert.AreEqual(10, bid.AmountLeft);
             }
 
             [Test]
