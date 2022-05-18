@@ -95,6 +95,12 @@ namespace Tests.GoodMarket
             {
                 Assert.AreNotEqual(firstOffer, market.Offers[0]);
             }
+
+            [Test]
+            public void DoNotAddBidToBook()
+            {
+                Assert.AreNotEqual(bid, market.Bids[0]);
+            }
         }
 
         //offer also resolved
