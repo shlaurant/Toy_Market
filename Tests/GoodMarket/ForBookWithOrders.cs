@@ -1,4 +1,5 @@
-﻿using Market;
+﻿using System.Collections.Generic;
+using Market;
 using NUnit.Framework;
 
 namespace Tests.GoodMarket
@@ -103,7 +104,38 @@ namespace Tests.GoodMarket
             }
         }
 
-        //offer also resolved
+        public class WhenBidLeft : ForBookWithOrders
+        {
+            private Order bid;
+            private Order secondOffer;
+
+            [SetUp]
+            public new void Setup()
+            {
+                base.Setup();
+                secondOffer = market.Offers[1];
+                bid = marketFac.AddOrder(Order.OrderType.Bid, 11, 20);
+            }
+
+            [Test]
+            public void ResolveFirstOffer()
+            {
+                Assert.AreEqual(secondOffer, market.Offers[0]);
+            }
+        }
+
+        // public class WhenBidMatchesSeveralOffers : ForBookWithOrders
+        // {
+        //     private Order bid;
+        //     private List<Order> originalOffers;
+        //
+        //     [SetUp]
+        //     public new void Setup()
+        //     {
+        //         base.Setup();
+        //         
+        //     }
+        // }
         //2or more offer
         //vice versa
     }
