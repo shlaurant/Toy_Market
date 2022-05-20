@@ -2,15 +2,23 @@
 {
     public class Transaction
     {
-        public readonly Order Other;
+        public readonly Order Bid;
+        public readonly Order Offer;
         public readonly int StrikePrice;
         public readonly int Amount;
 
-        public Transaction(Order other, int strikePrice, int amount)
+        public Transaction(Order bid, Order offer, int strikePrice, int amount)
         {
-            Other = other;
+            Bid = bid;
+            Offer = offer;
             StrikePrice = strikePrice;
             Amount = amount;
+        }
+
+        public override string ToString()
+        {
+            return
+                $"{nameof(Bid)}: {Bid}, {nameof(Offer)}: {Offer}, {nameof(StrikePrice)}: {StrikePrice}, {nameof(Amount)}: {Amount}";
         }
     }
 }

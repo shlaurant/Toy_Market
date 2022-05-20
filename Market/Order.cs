@@ -20,7 +20,8 @@ namespace Market
 
         public int AmountLeft => Amount - transactions.Sum(trs => trs.Amount);
 
-        private readonly List<Transaction> transactions = new List<Transaction>();
+        private readonly List<Transaction> transactions =
+            new List<Transaction>();
 
         public Order(Good good, int price, int amount, OrderType type,
             ITrader trader)
@@ -32,16 +33,35 @@ namespace Market
             Type = type;
         }
 
-        public static void Match(Order first, Order second)
+        public static Transaction Match(Order first, Order second)
         {
-            var tradedAmount = Math.Min(first.AmountLeft, second.AmountLeft);
-            first.AddTransaction(second, first.Price, tradedAmount);
-            second.AddTransaction(first, first.Price, tradedAmount);
-        }
+            if (first.Type.Equals(second.Type))
+            {
+                throw new ArgumentException(
+                    "Transaction cannot be made with orders of same type");
+            }
 
-        private void AddTransaction(Order other, int strikePrice, int amount)
-        {
-            transactions.Add(new Transaction(other, strikePrice, amount));
+            Order bid;
+            Order offer;
+
+            if (first.Type.Equals(OrderType.Bid))
+            {
+                bid = first;
+                offer = second;
+            }
+            else
+            {
+                bid = second;
+                offer = first;
+            }
+
+            var result = new Transaction(bid, offer, first.Price,
+                Math.Min(first.AmountLeft, second.AmountLeft));
+
+            first.transactions.Add(result);
+            second.transactions.Add(result);
+            
+            return result;
         }
 
         public override string ToString()
