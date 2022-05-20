@@ -31,22 +31,8 @@ namespace Market
 
             if (order.Type.Equals(Order.OrderType.Bid))
             {
-                var curNode = offers.First;
-                while (curNode != null && order.AmountLeft > 0)
-                {
-                    if (curNode.Value.Price > order.Price)
-                    {
-                        break;
-                    }
-
-                    Order.Match(curNode.Value, order);
-                    CurrentPrice = curNode.Value.Price;
-                    curNode = curNode.Next;
-                }
-
-                offers.Where(offer => offer.AmountLeft == 0).ToList()
-                    .ForEach(resolved => offers.Remove(resolved));
-                
+                TryMatchBid(order);
+                RemoveResolvedOffers();
                 if (order.AmountLeft > 0)
                 {
                     AddOrderToBook(order, bids, IsHigher);
@@ -55,6 +41,28 @@ namespace Market
             else
             {
                 AddOrderToBook(order, offers, IsLower);
+            }
+        }
+
+        private void RemoveResolvedOffers()
+        {
+            offers.Where(offer => offer.AmountLeft == 0).ToList()
+                .ForEach(resolved => offers.Remove(resolved));
+        }
+
+        private void TryMatchBid(Order order)
+        {
+            var curNode = offers.First;
+            while (curNode != null && order.AmountLeft > 0)
+            {
+                if (curNode.Value.Price > order.Price)
+                {
+                    break;
+                }
+
+                Order.Match(curNode.Value, order);
+                CurrentPrice = curNode.Value.Price;
+                curNode = curNode.Next;
             }
         }
 
