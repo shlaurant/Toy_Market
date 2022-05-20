@@ -29,23 +29,40 @@ namespace Market
                     $"Received an order of {order.Good} while this is {good} market");
             }
 
-            if (order.Type.Equals(Order.OrderType.Bid))
+            switch (order.Type)
             {
-                TryMatchOrder(order, offers, IsHigher);
-                RemoveResolvedOrders(offers);
-                if (order.AmountLeft > 0)
+                case Order.OrderType.Bid:
                 {
-                    AddOrderToBook(order, bids, IsHigher);
+                    HandleBid(order);
+                    break;
                 }
+                case Order.OrderType.Offer:
+                {
+                    HandleOffer(order);
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException(order.Type.ToString(), $"No operation exist for {order.Type}");
             }
-            else if (order.Type.Equals(Order.OrderType.Offer))
+        }
+
+        private void HandleOffer(Order order)
+        {
+            TryMatchOrder(order, bids, IsLower);
+            RemoveResolvedOrders(bids);
+            if (order.AmountLeft > 0)
             {
-                TryMatchOrder(order, bids, IsLower);
-                RemoveResolvedOrders(bids);
-                if (order.AmountLeft > 0)
-                {
-                    AddOrderToBook(order, offers, IsLower);
-                }
+                AddOrderToBook(order, offers, IsLower);
+            }
+        }
+
+        private void HandleBid(Order order)
+        {
+            TryMatchOrder(order, offers, IsHigher);
+            RemoveResolvedOrders(offers);
+            if (order.AmountLeft > 0)
+            {
+                AddOrderToBook(order, bids, IsHigher);
             }
         }
 
