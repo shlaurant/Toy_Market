@@ -7,8 +7,8 @@ namespace Tests.GoodMarket
 {
     public class ForBookWithOrders
     {
-        protected TestMarketFac marketFac = new TestMarketFac("oil");
-        protected Market.GoodMarket market;
+        private TestMarketFac marketFac = new("oil");
+        private Market.GoodMarket market;
 
         [SetUp]
         public void Setup()
@@ -79,35 +79,35 @@ namespace Tests.GoodMarket
             }
         }
         
-        // public class WhenImmediateOfferResolve : ForBookWithOrders
-        // {
-        //     private Order offer;
-        //
-        //     [SetUp]
-        //     public new void Setup()
-        //     {
-        //         base.Setup();
-        //         offer = marketFac.AddOrder(Order.OrderType.Offer, 10, 5);
-        //     }
-        //
-        //     [Test]
-        //     public void MatchOfferWithOneBid()
-        //     {
-        //         Assert.AreEqual(5, market.Bids[0].AmountLeft);
-        //     }
-        //
-        //     [Test]
-        //     public void MatchBidAndResolve()
-        //     {
-        //         Assert.AreNotEqual(offer, market.Offers[0]);
-        //     }
-        //     
-        //     [Test]
-        //     public void ChangeCurrentPrice()
-        //     {
-        //         Assert.AreEqual(10, market.CurrentPrice);
-        //     }
-        // }
+        public class WhenImmediateOfferResolve : ForBookWithOrders
+        {
+            private Order offer;
+        
+            [SetUp]
+            public new void Setup()
+            {
+                base.Setup();
+                offer = marketFac.AddOrder(Order.OrderType.Offer, 10, 5);
+            }
+        
+            [Test]
+            public void MatchOfferWithOneBid()
+            {
+                Assert.AreEqual(5, market.Bids[0].AmountLeft, $"Bid is {market.Bids[0]}");
+            }
+        
+            [Test]
+            public void MatchBidAndResolve()
+            {
+                Assert.AreNotEqual(offer, market.Offers[0]);
+            }
+            
+            [Test]
+            public void ChangeCurrentPrice()
+            {
+                Assert.AreEqual(10, market.CurrentPrice);
+            }
+        }
 
         public class WhenBidAndOfferFullyMatched : ForBookWithOrders
         {

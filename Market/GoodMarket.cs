@@ -31,16 +31,21 @@ namespace Market
 
             if (order.Type.Equals(Order.OrderType.Bid))
             {
-                TryMatchOrder(order, offers);
+                TryMatchOrder(order, offers, IsHigher);
                 RemoveResolvedOrders(offers);
                 if (order.AmountLeft > 0)
                 {
                     AddOrderToBook(order, bids, IsHigher);
                 }
             }
-            else
+            else if (order.Type.Equals(Order.OrderType.Offer))
             {
-                AddOrderToBook(order, offers, IsLower);
+                TryMatchOrder(order, bids, IsLower);
+                RemoveResolvedOrders(bids);
+                if (order.AmountLeft > 0)
+                {
+                    AddOrderToBook(order, offers, IsLower);
+                }
             }
         }
 
@@ -50,12 +55,12 @@ namespace Market
                 .ForEach(resolved => book.Remove(resolved));
         }
 
-        private void TryMatchOrder(Order order, LinkedList<Order> book)
+        private void TryMatchOrder(Order order, LinkedList<Order> book, Predicate<(Order,Order)> predicate)
         {
             var curNode = book.First;
             while (curNode != null && order.AmountLeft > 0)
             {
-                if (curNode.Value.Price > order.Price)
+                if (predicate.Invoke((curNode.Value, order)))
                 {
                     break;
                 }
