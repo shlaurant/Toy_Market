@@ -204,6 +204,38 @@ namespace Tests.GoodMarket
                 Assert.AreEqual(bid, market.Bids[0]);
             }
         }
+        
+        public class WhenOfferLeft : ForBookWithOrders
+        {
+            private Order offer;
+            private Order secondBid;
+
+            [SetUp]
+            public new void Setup()
+            {
+                base.Setup();
+                secondBid = market.Bids[1];
+                offer = marketFac.AddOrder(Order.OrderType.Offer, 10, 20);
+            }
+
+            [Test]
+            public void ResolveFirstBid()
+            {
+                Assert.AreEqual(secondBid, market.Bids[0]);
+            }
+
+            [Test]
+            public void ReduceOfferAmount()
+            {
+                Assert.AreEqual(10, offer.AmountLeft);
+            }
+
+            [Test]
+            public void AddOfferToBook()
+            {
+                Assert.AreEqual(offer, market.Offers[0]);
+            }
+        }
 
         public class WhenBidMatchesSeveralOffers : ForBookWithOrders
         {
@@ -242,6 +274,5 @@ namespace Tests.GoodMarket
                 Assert.AreEqual(10, market.Offers.First().AmountLeft);
             }
         }
-        //vice versa
     }
 }
