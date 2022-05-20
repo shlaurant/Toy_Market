@@ -140,6 +140,38 @@ namespace Tests.GoodMarket
                 Assert.AreEqual(bid.Price, market.CurrentPrice);
             }
         }
+        
+        public class WhenOfferAndBidFullyMatched : ForBookWithOrders
+        {
+            private Order offer;
+            private Order firstBid;
+
+            [SetUp]
+            public new void Setup()
+            {
+                base.Setup();
+                firstBid = market.Bids[0];
+                offer = marketFac.AddOrder(Order.OrderType.Offer, 10, 10);
+            }
+
+            [Test]
+            public void RemoveFullMatchedBid()
+            {
+                Assert.AreNotEqual(firstBid, market.Bids[0]);
+            }
+
+            [Test]
+            public void DoNotAddOfferToBook()
+            {
+                Assert.AreNotEqual(offer, market.Offers[0]);
+            }
+            
+            [Test]
+            public void ChangeCurrentPrice()
+            {
+                Assert.AreEqual(offer.Price, market.CurrentPrice);
+            }
+        }
 
         public class WhenBidLeft : ForBookWithOrders
         {
