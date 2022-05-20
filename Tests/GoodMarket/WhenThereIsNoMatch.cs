@@ -22,16 +22,16 @@ namespace Tests.GoodMarket
         [SetUp]
         public void Setup()
         {
-            bid0 = new Order(good, 10, 10, Order.OrderType.Bid, null);
-            bid1 = new Order(good, 11, 10, Order.OrderType.Bid, null);
-            bid2 = new Order(good, 8, 10, Order.OrderType.Bid, null);
-            bid3 = new Order(good, 10, 10, Order.OrderType.Bid, null);
-            wrongBid = new Order(wrongGood, 10, 10, Order.OrderType.Bid, null);
+            bid0 = new Order(good, 10, 10, Order.OrderType.Bid);
+            bid1 = new Order(good, 11, 10, Order.OrderType.Bid);
+            bid2 = new Order(good, 8, 10, Order.OrderType.Bid);
+            bid3 = new Order(good, 10, 10, Order.OrderType.Bid);
+            wrongBid = new Order(wrongGood, 10, 10, Order.OrderType.Bid);
 
-            offer0 = new Order(good, 10, 10, Order.OrderType.Offer, null);
-            offer1 = new Order(good, 9, 10, Order.OrderType.Offer, null);
-            offer2 = new Order(good, 11, 10, Order.OrderType.Offer, null);
-            offer3 = new Order(good, 10, 10, Order.OrderType.Offer, null);
+            offer0 = new Order(good, 10, 10, Order.OrderType.Offer);
+            offer1 = new Order(good, 9, 10, Order.OrderType.Offer);
+            offer2 = new Order(good, 11, 10, Order.OrderType.Offer);
+            offer3 = new Order(good, 10, 10, Order.OrderType.Offer);
             
             testMarket = new Market.GoodMarket(good);
         }

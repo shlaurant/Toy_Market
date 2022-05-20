@@ -16,20 +16,16 @@ namespace Market
         public readonly int Price;
         public readonly int Amount;
         public readonly OrderType Type;
-        public readonly ITrader trader;
 
         public int AmountLeft => Amount - transactions.Sum(trs => trs.Amount);
 
-        private readonly List<Transaction> transactions =
-            new List<Transaction>();
+        private readonly List<Transaction> transactions = new();
 
-        public Order(Good good, int price, int amount, OrderType type,
-            ITrader trader)
+        public Order(Good good, int price, int amount, OrderType type)
         {
             Good = good;
             Price = price;
             Amount = amount;
-            this.trader = trader;
             Type = type;
         }
 

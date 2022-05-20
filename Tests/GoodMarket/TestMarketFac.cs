@@ -22,7 +22,7 @@ namespace Tests.GoodMarket
 
         public Order AddOrder(Order.OrderType type, int price, int amount)
         {
-            var orderAdded = new Order(good, price, amount, type, null);
+            var orderAdded = new Order(good, price, amount, type);
             market.TakeOrder(orderAdded);
             return orderAdded;
         }
