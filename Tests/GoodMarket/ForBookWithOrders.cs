@@ -161,11 +161,25 @@ namespace Tests.GoodMarket
             {
                 Assert.AreEqual(originalOffers[2], market.Offers.First());
             }
-            //add to book
-            //change price
-            //reduce bid amount
+
+            [Test]
+            public void AddBidToBook()
+            {
+                Assert.AreEqual(bid, market.Bids.First());
+            }
+
+            [Test]
+            public void ChangeCurPrice()
+            {
+                Assert.AreEqual(12, market.CurrentPrice);
+            }
+
+            [Test]
+            public void CalcLeftBidAmount()
+            {
+                Assert.AreEqual(10, market.Offers.First().AmountLeft);
+            }
         }
-        //2or more offer
         //vice versa
     }
 }
