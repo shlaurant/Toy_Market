@@ -38,7 +38,7 @@ namespace Tests.GoodMarket
             public void AddBidToBookWithNoMatch()
             {
                 var bid = marketFac.AddOrder(Order.OrderType.Bid, 10, 5);
-                Assert.True(market.Bids[1].Equals(bid));
+                Assert.AreEqual(bid,market.Bids[1]);
             }
 
             [Test]
@@ -78,6 +78,36 @@ namespace Tests.GoodMarket
                 Assert.AreEqual(market.Offers[0].Price, market.CurrentPrice);
             }
         }
+        
+        // public class WhenImmediateOfferResolve : ForBookWithOrders
+        // {
+        //     private Order offer;
+        //
+        //     [SetUp]
+        //     public new void Setup()
+        //     {
+        //         base.Setup();
+        //         offer = marketFac.AddOrder(Order.OrderType.Offer, 10, 5);
+        //     }
+        //
+        //     [Test]
+        //     public void MatchOfferWithOneBid()
+        //     {
+        //         Assert.AreEqual(5, market.Bids[0].AmountLeft);
+        //     }
+        //
+        //     [Test]
+        //     public void MatchBidAndResolve()
+        //     {
+        //         Assert.AreNotEqual(offer, market.Offers[0]);
+        //     }
+        //     
+        //     [Test]
+        //     public void ChangeCurrentPrice()
+        //     {
+        //         Assert.AreEqual(10, market.CurrentPrice);
+        //     }
+        // }
 
         public class WhenBidAndOfferFullyMatched : ForBookWithOrders
         {
