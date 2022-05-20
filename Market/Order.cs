@@ -41,6 +41,18 @@ namespace Market
                     "Transaction cannot be made with orders of same type");
             }
 
+            var (bid, offer) = SeparateType(first, second);
+            var result = new Transaction(bid, offer, first.Price,
+                Math.Min(first.AmountLeft, second.AmountLeft));
+
+            first.transactions.Add(result);
+            second.transactions.Add(result);
+            
+            return result;
+        }
+
+        private static (Order bid, Order offer) SeparateType(Order first, Order second)
+        {
             Order bid;
             Order offer;
 
@@ -55,13 +67,7 @@ namespace Market
                 offer = first;
             }
 
-            var result = new Transaction(bid, offer, first.Price,
-                Math.Min(first.AmountLeft, second.AmountLeft));
-
-            first.transactions.Add(result);
-            second.transactions.Add(result);
-            
-            return result;
+            return (bid, offer);
         }
 
         public override string ToString()
