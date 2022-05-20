@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
 
 namespace Market
@@ -30,17 +31,23 @@ namespace Market
 
             if (order.Type.Equals(Order.OrderType.Bid))
             {
-                if (offers.First != null &&
-                    order.Price >= offers.First.Value.Price)
+                var curNode = offers.First;
+                while (curNode != null && order.AmountLeft > 0)
                 {
-                    Order.Match(offers.First.Value, order);
-                    CurrentPrice = offers.First.Value.Price;
-                    if (offers.First.Value.AmountLeft == 0)
+                    if (curNode.Value.Price > order.Price)
                     {
-                        offers.RemoveFirst();
+                        break;
                     }
+
+                    Order.Match(curNode.Value, order);
+                    CurrentPrice = curNode.Value.Price;
+                    curNode = curNode.Next;
                 }
-                else
+
+                offers.Where(offer => offer.AmountLeft == 0).ToList()
+                    .ForEach(resolved => offers.Remove(resolved));
+                
+                if (order.AmountLeft > 0)
                 {
                     AddOrderToBook(order, bids, IsHigher);
                 }
