@@ -271,6 +271,44 @@ namespace Tests.GoodMarket
             [Test]
             public void CalcLeftBidAmount()
             {
+                Assert.AreEqual(10, market.Bids.First().AmountLeft);
+            }
+        }
+        
+        public class WhenOfferMatchesSeveralBids : ForBookWithOrders
+        {
+            private Order offer;
+            private List<Order> originalBids;
+        
+            [SetUp]
+            public new void Setup()
+            {
+                base.Setup();
+                originalBids = new List<Order>(market.Bids);
+                offer = marketFac.AddOrder(Order.OrderType.Offer, 9, 30);
+            }
+
+            [Test]
+            public void Resolve2Bids()
+            {
+                Assert.AreEqual(originalBids[2], market.Bids.First());
+            }
+
+            [Test]
+            public void AddOfferToBook()
+            {
+                Assert.AreEqual(offer, market.Offers.First());
+            }
+
+            [Test]
+            public void ChangeCurPrice()
+            {
+                Assert.AreEqual(9, market.CurrentPrice);
+            }
+
+            [Test]
+            public void CalcLeftOfferAmount()
+            {
                 Assert.AreEqual(10, market.Offers.First().AmountLeft);
             }
         }
