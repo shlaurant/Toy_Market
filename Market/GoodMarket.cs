@@ -6,21 +6,41 @@ using System.Text;
 
 namespace Market
 {
+    /// <summary>
+    /// A market which handles one specific good. Can be used to construct a general market
+    /// </summary>
     public class GoodMarket
     {
         private readonly Good good;
         private readonly LinkedList<Order> bids = new();
         private readonly LinkedList<Order> offers = new();
 
+        /// <summary>
+        /// Returns a book of bids. High priority first.
+        /// </summary>
         public ImmutableList<Order> Bids => bids.ToImmutableList();
+        
+        /// <summary>
+        /// Returns a book of offers. High priority first.
+        /// </summary>
         public ImmutableList<Order> Offers => offers.ToImmutableList();
-        public int CurrentPrice { get; set; }
+        
+        /// <summary>
+        /// Returns latest strike price
+        /// </summary>
+        public int CurrentPrice { get; private set; }
 
         public GoodMarket(Good good)
         {
             this.good = good;
         }
 
+        /// <summary>
+        /// Take an order and try to resolve or book it.
+        /// </summary>
+        /// <param name="order">An order to take</param>
+        /// <exception cref="ArgumentException">When an order has wrong good info.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When a type of an order is not recognizable.</exception>
         public void TakeOrder(Order order)
         {
             if (!order.Good.Equals(good))
